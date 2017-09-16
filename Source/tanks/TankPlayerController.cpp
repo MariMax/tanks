@@ -24,7 +24,39 @@ ATank* ATankPlayerController::GetControlledTank() const {
 
 void ATankPlayerController::aimTowardsCrosshair(){
     if (!ownTank) return;
+    
+    FVector hitLocation;
+    
+    if (getSightRayHitLoaction(hitLocation)){
+        
+    }
 }
+
+bool ATankPlayerController::getSightRayHitLoaction(FVector& out_hitLocation) const {
+    int32 viewportSizeX, viewportSizeY;
+    GetViewportSize(viewportSizeX, viewportSizeY);
+    auto crossHairPositionScreenLocation = getAimPointScreenLocation(viewportSizeX, viewportSizeY);
+    
+    
+    return false;
+}
+
+FVector2D ATankPlayerController::getAimPointScreenLocation(int32 viewportSizeX, int32 viewportSizeY) const {
+    return FVector2D(viewportSizeX * crossHairXPosition,viewportSizeY * crossHairYPosition);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ATankPlayerController::~ATankPlayerController() {
     delete ownTank;

@@ -14,14 +14,23 @@ UCLASS()
 class TANKS_API ATankPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+public:
+    virtual void BeginPlay() override;
+    virtual void Tick(float) override;
     
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="CrossHair Position")
+    float crossHairXPosition = .5f;
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="CrossHair Position")
+    float crossHairYPosition = .5f;
+
+private:
     ATank* ownTank;
 	
     ATank* GetControlledTank() const;
+    FVector2D getAimPointScreenLocation(int32, int32) const;
     void aimTowardsCrosshair();
     
-    virtual void BeginPlay() override;
-    virtual void Tick(float) override;
+    bool getSightRayHitLoaction(FVector&) const;
 	
     ~ATankPlayerController();
 };
