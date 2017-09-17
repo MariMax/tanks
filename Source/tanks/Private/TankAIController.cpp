@@ -8,14 +8,12 @@ void ATankAIController::initOwnTank(){
     if (!posessedTank){
         UE_LOG(LogTemp, Error, TEXT("ATankAIController: tank is not posessed"));
     } else {
-        ownTank = posessedTank;
         UE_LOG(LogTemp, Warning, TEXT("ATankAIController: tank %s"), *posessedTank->GetName());
     }
 }
 
 void ATankAIController::BeginPlay() {
     Super::BeginPlay();
-    world = GetWorld();
     initOwnTank();
     auto playerTank = GetPlayerTank();
     if(!playerTank){
@@ -30,14 +28,8 @@ ATank* ATankAIController::GetControlledTank() const {
 }
 
 ATank* ATankAIController::GetPlayerTank() const {
-    auto pc = world->GetFirstPlayerController();
+    auto pc = GetWorld()->GetFirstPlayerController();
     auto playerPawn = pc->GetPawnOrSpectator();
     if (!playerPawn) return nullptr;
     return Cast<ATank>(playerPawn);
-}
-
-
-ATankAIController::~ATankAIController(){
-    delete world;
-    delete ownTank;
 }

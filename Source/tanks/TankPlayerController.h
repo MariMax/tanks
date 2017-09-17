@@ -22,15 +22,19 @@ public:
     float crossHairXPosition = .5f;
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="CrossHair Position")
     float crossHairYPosition = .5f;
+    UPROPERTY(EditAnywhere, Category="Weapon Settings")
+    float maxHitDistance = 10000.f;
 
 private:
-    ATank* ownTank;
+
 	
     ATank* GetControlledTank() const;
     FVector2D getAimPointScreenLocation(int32, int32) const;
     void aimTowardsCrosshair();
     
     bool getSightRayHitLoaction(FVector&) const;
+    bool getLookDirection(const FVector2D&, FVector&) const;
+    bool getVectorHitLocation(const FVector&, FVector&) const;
 	
-    ~ATankPlayerController();
+//    ~ATankPlayerController();
 };

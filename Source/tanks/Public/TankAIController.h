@@ -16,16 +16,11 @@ class TANKS_API ATankAIController : public AAIController
 	GENERATED_BODY()
 
 private:
-    UWorld* world;
-    ATank* ownTank;
-
     void BeginPlay() override;
     
     ATank* GetControlledTank() const;
     void initOwnTank();
     
     ATank* GetPlayerTank() const;
-    
-    ~ATankAIController();
 	
 };
