@@ -1,10 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankAIController.h"
+#include "Tank.h"
 
 
 void ATankAIController::initOwnTank(){
-    auto posessedTank = GetControlledTank();
+    auto posessedTank = getControlledTank();
     if (!posessedTank){
         UE_LOG(LogTemp, Error, TEXT("ATankAIController: tank is not posessed"));
     } else {
@@ -15,7 +16,7 @@ void ATankAIController::initOwnTank(){
 void ATankAIController::BeginPlay() {
     Super::BeginPlay();
     initOwnTank();
-    auto playerTank = GetPlayerTank();
+    auto playerTank = getPlayerTank();
     if(!playerTank){
         UE_LOG(LogTemp, Error, TEXT("ATankAIController: player not found"));
     } else {
@@ -23,11 +24,21 @@ void ATankAIController::BeginPlay() {
     }
 }
 
-ATank* ATankAIController::GetControlledTank() const {
+void ATankAIController::Tick(float deltaTime) {
+    Super::Tick(deltaTime);
+    
+    auto playerTank = getPlayerTank();
+    auto ownTank = getControlledTank();
+    if (!playerTank || !ownTank) return;
+    auto playerLocation = playerTank->GetActorLocation();
+    ownTank->aimAt(playerLocation);
+}
+
+ATank* ATankAIController::getControlledTank() const {
     return Cast<ATank>(GetPawn());
 }
 
-ATank* ATankAIController::GetPlayerTank() const {
+ATank* ATankAIController::getPlayerTank() const {
     auto pc = GetWorld()->GetFirstPlayerController();
     auto playerPawn = pc->GetPawnOrSpectator();
     if (!playerPawn) return nullptr;
