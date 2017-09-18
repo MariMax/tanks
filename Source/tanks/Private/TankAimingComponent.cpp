@@ -17,10 +17,12 @@ UTankAimingComponent::UTankAimingComponent()
 }
 
 void UTankAimingComponent::SetBarrelReference(UTankBarrel* barrelReference) {
+    if (!barrelReference) return;
     Barrel = barrelReference;
 }
 
 void UTankAimingComponent::SetTurretReference(UTankTurret* turretReference) {
+    if (!turretReference) return;
     Turret = turretReference;
 }
 
