@@ -2,6 +2,7 @@
 
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 #include <Kismet/GameplayStatics.h>
 
 
@@ -19,8 +20,13 @@ void UTankAimingComponent::SetBarrelReference(UTankBarrel* barrelReference) {
     Barrel = barrelReference;
 }
 
+void UTankAimingComponent::SetTurretReference(UTankTurret* turretReference) {
+    Turret = turretReference;
+}
+
+
 void UTankAimingComponent::aimAt(const FVector& hitLocation, float launchSpeed){
-    if (!Barrel) return;
+    if (!Barrel || !Turret) return;
     FVector OutLaunchVelocity;
     FCollisionResponseParams collisionResponseParams(ECollisionResponse::ECR_Block);
     
@@ -53,13 +59,14 @@ void UTankAimingComponent::aimAt(const FVector& hitLocation, float launchSpeed){
 }
 
 void UTankAimingComponent::moveBarrelTowardsAimDirrection(const FVector& aimDirrection) {
-    if (!Barrel) return;
+    if (!Barrel || !Turret) return;
     auto currentRotation = Barrel->GetForwardVector().Rotation();
     auto aimRotation = aimDirrection.Rotation();
     auto diff = aimRotation - currentRotation;
     
     
     Barrel->Elevate(diff.Pitch);
+    Turret->Rotate(diff.Yaw);
 }
 
 
