@@ -29,7 +29,7 @@ public:
     void SetTurretReference(UTankTurret* turretReference);
     
     UFUNCTION(BlueprintCallable, Category="Setup")
-    void Fire();    
+    void Fire();
     
 protected:
     UTankAimingComponent* TankAimingComponent = nullptr;
@@ -40,10 +40,15 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
     
     
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Fire")
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Fire")
     float launchSpeed = 4000.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = Fire)
+	float reloadTimEInSeconds = 3;
+
+	double lastFireTime = FPlatformTime::Seconds();
 	
-	UPROPERTY(EditAnywhere, Category="Setup")
+	UPROPERTY(EditDefaultsOnly, Category="Setup")
     TSubclassOf<AProjectile> ProjectileBlueprint;
     
     UTankBarrel* Barrel = nullptr;

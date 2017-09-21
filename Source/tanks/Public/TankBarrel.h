@@ -17,13 +17,13 @@ class TANKS_API UTankBarrel : public UStaticMeshComponent
 public:
     void Elevate(float);
 private:
-    UPROPERTY(EditAnywhere, Category=Setup)
+    UPROPERTY(EditDefaultsOnly, Category=Setup)
     float maxDegreesPerSecond = 10.f;
     
-    UPROPERTY(EditAnywhere, Category=Setup)
+    UPROPERTY(EditDefaultsOnly, Category=Setup)
     float maxElevationDegrees = 40.f;
     
-    UPROPERTY(EditAnywhere, Category=Setup)
+    UPROPERTY(EditDefaultsOnly, Category=Setup)
     float minElevationDegrees = 0.f;
     
 };

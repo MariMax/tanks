@@ -23,7 +23,7 @@ public:
     float crossHairXPosition = .5f;
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="CrossHair Position")
     float crossHairYPosition = .5f;
-    UPROPERTY(EditAnywhere, Category="Weapon Settings")
+    UPROPERTY(EditDefaultsOnly, Category="Weapon Settings")
     float maxHitDistance = 10000.f;
 
 private:
