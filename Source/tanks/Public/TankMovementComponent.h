@@ -18,14 +18,14 @@ class TANKS_API UTankMovementComponent : public UNavMovementComponent
 
 public:
     //initiliaze tracks on movement component
-    UFUNCTION(BlueprintCallable, Category=Setup)
+    UFUNCTION(BlueprintCallable, Category="Setup")
     void InitTracks(UTankTrack* lt, UTankTrack* rt);
     
     // Accepts value from -1 to +1 to move tank back and forth
-	UFUNCTION(BlueprintCallable, Category=Action)
+	UFUNCTION(BlueprintCallable, Category="Action")
     void IntendMoveForward(float Throw);
     
-    UFUNCTION(BlueprintCallable, Category=Action)
+    UFUNCTION(BlueprintCallable, Category="Action")
     void IntendRotate(float Throw);
 	
 private:

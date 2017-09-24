@@ -32,6 +32,7 @@ public:
     void Fire();
     
 protected:
+    UPROPERTY(BlueprintReadOnly)
     UTankAimingComponent* TankAimingComponent = nullptr;
 public:
 
@@ -42,7 +43,7 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Fire")
     float launchSpeed = 4000.f;
 
-	UPROPERTY(EditDefaultsOnly, Category = Fire)
+	UPROPERTY(EditDefaultsOnly, Category = "Fire")
 	float reloadTimEInSeconds = 3;
 
 	double lastFireTime = FPlatformTime::Seconds();

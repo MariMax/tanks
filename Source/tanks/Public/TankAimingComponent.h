@@ -6,6 +6,12 @@
 #include "Components/ActorComponent.h"
 #include "TankAimingComponent.generated.h"
 
+UENUM()
+enum class ECrosshairState : uint8 {
+    Ready,
+    Reloading
+};
+
 class UTankBarrel;
 class UTankTurret;
 
@@ -22,6 +28,10 @@ public:
     
     void SetBarrelReference(UTankBarrel* barrelReference);
     void SetTurretReference(UTankTurret* turretReference);
+    
+protected:
+    UPROPERTY(BlueprintReadOnly, Category = "State")
+    ECrosshairState CrosshairState = ECrosshairState::Reloading;
 
 private:
     UTankBarrel* Barrel = nullptr;

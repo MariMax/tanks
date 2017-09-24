@@ -26,16 +26,18 @@ public:
     UPROPERTY(EditDefaultsOnly, Category="Weapon Settings")
     float maxHitDistance = 10000.f;
 
+protected:
+    UFUNCTION(BlueprintCallable, Category="Setup")
+    ATank* GetControlledTank() const;
+    
 private:
 
 	
-    ATank* GetControlledTank() const;
+    
     FVector2D getAimPointScreenLocation(int32, int32) const;
     void aimTowardsCrosshair();
     
     bool getSightRayHitLoaction(FVector&) const;
     bool getLookDirection(const FVector2D&, FVector&) const;
     bool getVectorHitLocation(const FVector&, FVector&) const;
-	
-//    ~ATankPlayerController();
 };
