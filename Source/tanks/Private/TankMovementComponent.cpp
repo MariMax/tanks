@@ -12,7 +12,7 @@ void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool
 	auto turnIntention = 1 - forwardIntention;
 	auto rotation = FVector::CrossProduct(AIForwardIntention, AIForwardVector);
 	IntendRotate(rotation.Z);
-	UE_LOG(LogTemp, Warning, TEXT("%s moving to you %f"), *GetOwner()->GetName(), forwardIntention);
+//    UE_LOG(LogTemp, Warning, TEXT("%s moving to you %f"), *GetOwner()->GetName(), forwardIntention);
 
 }
 

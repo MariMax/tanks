@@ -17,8 +17,7 @@ class TANKS_API UTankMovementComponent : public UNavMovementComponent
 	GENERATED_BODY()
 
 public:
-	void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
-    //initiliaze tracks on movament component
+    //initiliaze tracks on movement component
     UFUNCTION(BlueprintCallable, Category=Setup)
     void InitTracks(UTankTrack* lt, UTankTrack* rt);
     
@@ -30,6 +29,8 @@ public:
     void IntendRotate(float Throw);
 	
 private:
+    void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
+
     UTankTrack* LeftTrack = nullptr;
     UTankTrack* RightRtack = nullptr;
 };
