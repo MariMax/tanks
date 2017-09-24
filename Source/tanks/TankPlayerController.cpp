@@ -2,15 +2,11 @@
 
 #include "TankPlayerController.h"
 #include "TankAimingComponent.h"
-#include "public/Tank.h"
 
 void ATankPlayerController::BeginPlay() {
     Super::BeginPlay();
-    AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
-    if (!AimingComponent) {
-        UE_LOG(LogTemp, Error, TEXT("Aiming component not found, please assign it to the tank"));
-        return;
-    }
+    auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+    if (!ensure(AimingComponent)) {return;}
     AimingComponentFound(AimingComponent);
 }
 
@@ -19,12 +15,9 @@ void ATankPlayerController::Tick(float deltaTime) {
     aimTowardsCrosshair();
 }
 
-ATank* ATankPlayerController::GetControlledTank() const {
-    return Cast<ATank>(GetPawn());
-}
-
 void ATankPlayerController::aimTowardsCrosshair(){
-    if(!ensure(AimingComponent)) {return;}
+    auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+    if (!ensure(AimingComponent)) {return;}
     
     FVector hitLocation;
     
@@ -59,7 +52,7 @@ bool ATankPlayerController::getLookDirection(const FVector2D& screenLocation, FV
 }
 
 bool ATankPlayerController::getVectorHitLocation(const FVector& direction, FVector& out_Hit) const {
-    auto ownTank = GetControlledTank();
+    auto ownTank = GetPawn();
     if (!ownTank) return false;
     auto tankLocation = PlayerCameraManager->GetCameraLocation();
     FVector end = tankLocation + direction * maxHitDistance;

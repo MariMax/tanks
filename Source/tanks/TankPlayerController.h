@@ -6,8 +6,6 @@
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
 
-
-class ATank;
 class UTankAimingComponent;
 /**
  * 
@@ -28,14 +26,10 @@ public:
     float maxHitDistance = 10000.f;
 
 protected:
-    UFUNCTION(BlueprintCallable, Category="Setup")
-    ATank* GetControlledTank() const;
-    
     UFUNCTION(BlueprintImplementableEvent, Category="Setup")
     void AimingComponentFound(UTankAimingComponent* AimingComponentRef);
     
 private:
-    UTankAimingComponent* AimingComponent = nullptr;
     FVector2D getAimPointScreenLocation(int32, int32) const;
     void aimTowardsCrosshair();
     

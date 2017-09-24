@@ -6,8 +6,6 @@
 #include "AIController.h"
 #include "TankAIController.generated.h"
 
-class ATank;
-
 /**
  * 
  */
@@ -20,11 +18,8 @@ private:
     void BeginPlay() override;
     virtual void Tick(float DeltaTime) override;
     
-    ATank* getControlledTank() const;
-    
-    ATank* getPlayerTank() const;
+    APawn* getPlayerTank() const;
     
     UPROPERTY(EditDefaultsOnly, Category="Setup")
     float HowFarAwayICanStopMpvingTowardsTheGoal = 2000;
-	
 };
