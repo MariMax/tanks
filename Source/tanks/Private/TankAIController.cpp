@@ -25,6 +25,10 @@ void ATankAIController::Tick(float deltaTime) {
     auto ownTank = getControlledTank();
     if (!playerTank || !ownTank) return;
     auto playerLocation = playerTank->GetActorLocation();
+    
+    MoveToActor(playerTank, HowFarAwayICanStopMpvingTowardsTheGoal);
+    
+    
     ownTank->aimAt(playerLocation);
 
 	ownTank->Fire();

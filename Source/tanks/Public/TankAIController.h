@@ -24,5 +24,8 @@ private:
     void initOwnTank();
     
     ATank* getPlayerTank() const;
+    
+    UPROPERTY(EditDefaultsOnly, Category=Setup)
+    float HowFarAwayICanStopMpvingTowardsTheGoal = 30000;
 	
 };
