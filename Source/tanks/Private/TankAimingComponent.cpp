@@ -3,32 +3,22 @@
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
+#include "Projectile.h"
 #include <Kismet/GameplayStatics.h>
-
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
 }
 
-void UTankAimingComponent::SetBarrelReference(UTankBarrel* barrelReference) {
-    if (!barrelReference) return;
-    Barrel = barrelReference;
+void UTankAimingComponent::InitAimingComponent(UTankBarrel* barrel, UTankTurret* turret){
+    Turret = turret;
+    Barrel = barrel;
 }
 
-void UTankAimingComponent::SetTurretReference(UTankTurret* turretReference) {
-    if (!turretReference) return;
-    Turret = turretReference;
-}
-
-
-void UTankAimingComponent::aimAt(const FVector& hitLocation, float launchSpeed){
-    if (!Barrel || !Turret) return;
+void UTankAimingComponent::aimAt(const FVector& hitLocation){
+    if (!ensure(Barrel) || !ensure(Turret)) return;
     FVector OutLaunchVelocity;
     FCollisionResponseParams collisionResponseParams(ECollisionResponse::ECR_Block);
     
@@ -37,7 +27,7 @@ void UTankAimingComponent::aimAt(const FVector& hitLocation, float launchSpeed){
                                                                         OutLaunchVelocity,
                                                                         Barrel->GetSocketLocation(FName("Projectile")),
                                                                         hitLocation,
-                                                                        launchSpeed,
+                                                                        LaunchSpeed,
                                                                         false,
                                                                         1.f,
                                                                         0.f,
@@ -47,16 +37,19 @@ void UTankAimingComponent::aimAt(const FVector& hitLocation, float launchSpeed){
     if (bHaveAimSolution){
         FVector aimDirrection = OutLaunchVelocity.GetSafeNormal();
         moveBarrelTowardsAimDirrection(aimDirrection);
-        
-//        auto Time = GetWorld()->GetTimeSeconds();
-//        UE_LOG(LogTemp, Warning, TEXT("%f: +"), Time);
-
     }
-//    else {
-//        auto Time = GetWorld()->GetTimeSeconds();
-//        UE_LOG(LogTemp, Warning, TEXT("%f: +"), Time);
-//
-//    }
+}
+
+void UTankAimingComponent::Fire() {
+    if (FPlatformTime::Seconds() - LastFireTime < ReloadTimEInSeconds) {return;}
+    if (!ensure(Barrel) || !ensure(ProjectileBlueprint)) {return;}
+    
+    //spawn projectile at the socket location
+    auto location = Barrel->GetSocketLocation(FName("Projectile"));
+    auto rotation = Barrel->GetSocketRotation(FName("Projectile"));
+    auto projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, location, rotation);
+    LastFireTime = FPlatformTime::Seconds();
+    projectile->launchProjectile(LaunchSpeed);
 
 }
 
@@ -66,10 +59,6 @@ void UTankAimingComponent::moveBarrelTowardsAimDirrection(const FVector& aimDirr
     auto aimRotation = aimDirrection.Rotation();
     auto diff = aimRotation - currentRotation;
     
-    
     Barrel->Elevate(diff.Pitch);
     Turret->Rotate(diff.Yaw);
 }
-
-
-

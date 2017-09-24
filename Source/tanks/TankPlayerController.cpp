@@ -1,16 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankPlayerController.h"
+#include "TankAimingComponent.h"
 #include "public/Tank.h"
 
 void ATankPlayerController::BeginPlay() {
     Super::BeginPlay();
-    auto posessedTank = GetControlledTank();
-    if (!posessedTank){
-        UE_LOG(LogTemp, Error, TEXT("ATankPlayerController: tank is not posessed"));
-    } else {
-        UE_LOG(LogTemp, Warning, TEXT("ATankPlayerController: tank %s"), *posessedTank->GetName());
+    AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+    if (!AimingComponent) {
+        UE_LOG(LogTemp, Error, TEXT("Aiming component not found, please assign it to the tank"));
+        return;
     }
+    AimingComponentFound(AimingComponent);
 }
 
 void ATankPlayerController::Tick(float deltaTime) {
@@ -23,13 +24,13 @@ ATank* ATankPlayerController::GetControlledTank() const {
 }
 
 void ATankPlayerController::aimTowardsCrosshair(){
-    if(!GetControlledTank()) return;
+    if(!ensure(AimingComponent)) {return;}
     
     FVector hitLocation;
     
     if (getSightRayHitLoaction(hitLocation)){
         //we can hit something
-        GetControlledTank()->aimAt(hitLocation);
+        AimingComponent->aimAt(hitLocation);
     }
 }
 
@@ -86,20 +87,3 @@ bool ATankPlayerController::getVectorHitLocation(const FVector& direction, FVect
     out_Hit = FVector(0);
     return false;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//ATankPlayerController::~ATankPlayerController() {
-//    delete ownTank;
-//}

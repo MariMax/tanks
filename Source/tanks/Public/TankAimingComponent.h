@@ -14,6 +14,8 @@ enum class ECrosshairState : uint8 {
 
 class UTankBarrel;
 class UTankTurret;
+class UTankAimingComponent;
+class AProjectile;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TANKS_API UTankAimingComponent : public UActorComponent
@@ -24,18 +26,32 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 
-    void aimAt(const FVector&, float);
+    void aimAt(const FVector&);
     
-    void SetBarrelReference(UTankBarrel* barrelReference);
-    void SetTurretReference(UTankTurret* turretReference);
+    UFUNCTION(BlueprintCallable, Category="Setup")
+    void Fire();
     
 protected:
-    UPROPERTY(BlueprintReadOnly, Category = "State")
-    ECrosshairState CrosshairState = ECrosshairState::Reloading;
-
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "State")
+    ECrosshairState CrosshairState = ECrosshairState::Ready;
+    
+    UFUNCTION(BlueprintCallable, Category="Setup")
+    void InitAimingComponent(UTankBarrel* barrel, UTankTurret* turret);
+    
 private:
     UTankBarrel* Barrel = nullptr;
     UTankTurret* Turret = nullptr;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Fire")
+    float ReloadTimEInSeconds = 10;
+    
+    UPROPERTY(EditDefaultsOnly, Category="Fire")
+    float LaunchSpeed = 4000.f;
+    
+    double LastFireTime = FPlatformTime::Seconds();
+    
+    UPROPERTY(EditDefaultsOnly, Category="Setup")
+    TSubclassOf<AProjectile> ProjectileBlueprint;
     
     void moveBarrelTowardsAimDirrection(const FVector&);
 
