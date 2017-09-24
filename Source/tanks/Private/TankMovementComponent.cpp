@@ -3,6 +3,19 @@
 #include "TankMovementComponent.h"
 #include "TankTrack.h"
 
+void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) {
+	auto AIForwardIntention = MoveVelocity.GetSafeNormal();
+	auto AIForwardVector = GetOwner()->GetActorForwardVector();
+
+	auto forwardIntention = FVector::DotProduct(AIForwardIntention, AIForwardVector);
+	IntendMoveForward(forwardIntention);
+	auto turnIntention = 1 - forwardIntention;
+	auto rotation = FVector::CrossProduct(AIForwardIntention, AIForwardVector);
+	IntendRotate(rotation.Z);
+	UE_LOG(LogTemp, Warning, TEXT("%s moving to you %f"), *GetOwner()->GetName(), forwardIntention);
+
+}
+
 void UTankMovementComponent::InitTracks(UTankTrack* lt, UTankTrack* rt) {
     LeftTrack = lt;
     RightRtack = rt;
