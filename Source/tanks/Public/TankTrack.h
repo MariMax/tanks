@@ -19,6 +19,8 @@ public:
     void Throttle(float speed);
     
 private:
+    UTankTrack();
+    virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction) override;
     //Max force per track in newtons
     UPROPERTY(EditDefaultsOnly)
     float MaxTrackDrivingForce = 20000000.f;
