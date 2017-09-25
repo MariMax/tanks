@@ -17,6 +17,10 @@ void UTankAimingComponent::InitAimingComponent(UTankBarrel* barrel, UTankTurret*
     Barrel = barrel;
 }
 
+void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
+{
+}
+
 void UTankAimingComponent::aimAt(const FVector& hitLocation){
     if (!ensure(Barrel) || !ensure(Turret)) return;
     FVector OutLaunchVelocity;
