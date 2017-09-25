@@ -19,6 +19,12 @@ void UTankAimingComponent::InitAimingComponent(UTankBarrel* barrel, UTankTurret*
 
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
 {
+    Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+    if (FPlatformTime::Seconds() - LastFireTime < ReloadTimeInSeconds) {
+        CrosshairState = ECrosshairState::Reloading;
+        return;
+    }
+    CrosshairState = ECrosshairState::Ready;
 }
 
 void UTankAimingComponent::aimAt(const FVector& hitLocation){
@@ -45,7 +51,7 @@ void UTankAimingComponent::aimAt(const FVector& hitLocation){
 }
 
 void UTankAimingComponent::Fire() {
-    if (FPlatformTime::Seconds() - LastFireTime < ReloadTimEInSeconds) {return;}
+    if (CrosshairState == ECrosshairState::Reloading) {return;}
     if (!ensure(Barrel) || !ensure(ProjectileBlueprint)) {return;}
     
     //spawn projectile at the socket location
