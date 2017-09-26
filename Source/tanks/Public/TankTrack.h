@@ -20,7 +20,14 @@ public:
     
 private:
     UTankTrack();
-    virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction) override;
+	virtual void BeginPlay() override;
+	void DriveTrack(float);
+	
+	float CurrentThrottle = 0;
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	void ApplySideForce();
     //Max force per track in newtons
     UPROPERTY(EditDefaultsOnly)
     float MaxTrackDrivingForce = 20000000.f;
