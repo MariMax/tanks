@@ -20,6 +20,10 @@ void UTankAimingComponent::InitAimingComponent(UTankBarrel* barrel, UTankTurret*
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
 {
     Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	if (Ammo <= 0) {
+		CrosshairState = ECrosshairState::Empty;
+		return;
+	}
     if (FPlatformTime::Seconds() - LastFireTime < ReloadTimeInSeconds) {
         CrosshairState = ECrosshairState::Reloading;
         return;
@@ -55,21 +59,25 @@ void UTankAimingComponent::aimAt(const FVector& hitLocation){
 }
 
 void UTankAimingComponent::Fire() {
-    if (CrosshairState == ECrosshairState::Reloading) {return;}
+    if (CrosshairState == ECrosshairState::Reloading || CrosshairState == ECrosshairState::Empty) {return;}
     if (!ensure(Barrel) || !ensure(ProjectileBlueprint)) {return;}
-    
+	Ammo--;
     //spawn projectile at the socket location
     auto location = Barrel->GetSocketLocation(FName("Projectile"));
     auto rotation = Barrel->GetSocketRotation(FName("Projectile"));
     auto projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, location, rotation);
     LastFireTime = FPlatformTime::Seconds();
     projectile->launchProjectile(LaunchSpeed);
-
 }
 
 ECrosshairState UTankAimingComponent::GetCrosshairState() const
 {
 	return CrosshairState;
+}
+
+int32 UTankAimingComponent::GetAmmo() const
+{
+	return Ammo;
 }
 
 void UTankAimingComponent::moveBarrelTowardsAimDirrection() {

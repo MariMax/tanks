@@ -23,7 +23,8 @@ void ATankAIController::Tick(float deltaTime) {
     if(!ensure(aimingComponent)) {return;}
     
     aimingComponent->aimAt(playerLocation);
-	if (aimingComponent->GetCrosshairState() == ECrosshairState::Locked) {
+	auto fireState = aimingComponent->GetCrosshairState();
+	if (fireState  == ECrosshairState::Locked) {
 		aimingComponent->Fire();
 	}
 }

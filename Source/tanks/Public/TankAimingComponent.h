@@ -11,6 +11,7 @@ enum class ECrosshairState : uint8 {
     Ready,
     Reloading,
 	Locked,
+	Empty,
 };
 
 class UTankBarrel;
@@ -33,6 +34,9 @@ public:
     UFUNCTION(BlueprintCallable, Category="Setup")
     void Fire();
 	ECrosshairState GetCrosshairState() const;
+
+	UFUNCTION(BlueprintCallable, Category = "State")
+	int32 GetAmmo() const;
     
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "State")
@@ -59,4 +63,7 @@ private:
     void moveBarrelTowardsAimDirrection();
 
 	FVector AimDirection = FVector(0);
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	int32 Ammo = 10;
 };
