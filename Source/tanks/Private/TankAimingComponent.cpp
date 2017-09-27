@@ -24,6 +24,10 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
         CrosshairState = ECrosshairState::Reloading;
         return;
     }
+	if (Barrel && Barrel->GetForwardVector().Equals(AimDirection, 0.01)) {
+		CrosshairState = ECrosshairState::Locked;
+		return;
+	}
     CrosshairState = ECrosshairState::Ready;
 }
 
@@ -45,8 +49,8 @@ void UTankAimingComponent::aimAt(const FVector& hitLocation){
                                                                         );
     
     if (bHaveAimSolution){
-        FVector aimDirrection = OutLaunchVelocity.GetSafeNormal();
-        moveBarrelTowardsAimDirrection(aimDirrection);
+        AimDirection = OutLaunchVelocity.GetSafeNormal();
+        moveBarrelTowardsAimDirrection();
     }
 }
 
@@ -63,12 +67,18 @@ void UTankAimingComponent::Fire() {
 
 }
 
-void UTankAimingComponent::moveBarrelTowardsAimDirrection(const FVector& aimDirrection) {
+ECrosshairState UTankAimingComponent::GetCrosshairState() const
+{
+	return CrosshairState;
+}
+
+void UTankAimingComponent::moveBarrelTowardsAimDirrection() {
     if (!Barrel || !Turret) return;
     auto currentRotation = Barrel->GetForwardVector().Rotation();
-    auto aimRotation = aimDirrection.Rotation();
+    auto aimRotation = AimDirection.Rotation();
     auto diff = aimRotation - currentRotation;
     
     Barrel->Elevate(diff.Pitch);
+	if (FMath::Abs(diff.Yaw) > 180) diff.Yaw = 180 - diff.Yaw;
     Turret->Rotate(diff.Yaw);
 }

@@ -23,7 +23,9 @@ void ATankAIController::Tick(float deltaTime) {
     if(!ensure(aimingComponent)) {return;}
     
     aimingComponent->aimAt(playerLocation);
-    aimingComponent->Fire();
+	if (aimingComponent->GetCrosshairState() == ECrosshairState::Locked) {
+		aimingComponent->Fire();
+	}
 }
 
 APawn* ATankAIController::getPlayerTank() const {

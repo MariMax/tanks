@@ -21,5 +21,5 @@ private:
     APawn* getPlayerTank() const;
     
     UPROPERTY(EditDefaultsOnly, Category="Setup")
-    float HowFarAwayICanStopMpvingTowardsTheGoal = 2000;
+    float HowFarAwayICanStopMpvingTowardsTheGoal = 8000;
 };

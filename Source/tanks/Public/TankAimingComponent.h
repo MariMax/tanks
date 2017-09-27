@@ -9,7 +9,8 @@
 UENUM()
 enum class ECrosshairState : uint8 {
     Ready,
-    Reloading
+    Reloading,
+	Locked,
 };
 
 class UTankBarrel;
@@ -31,6 +32,7 @@ public:
     
     UFUNCTION(BlueprintCallable, Category="Setup")
     void Fire();
+	ECrosshairState GetCrosshairState() const;
     
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "State")
@@ -54,6 +56,7 @@ private:
     UPROPERTY(EditDefaultsOnly, Category="Setup")
     TSubclassOf<AProjectile> ProjectileBlueprint;
     
-    void moveBarrelTowardsAimDirrection(const FVector&);
+    void moveBarrelTowardsAimDirrection();
 
+	FVector AimDirection = FVector(0);
 };
