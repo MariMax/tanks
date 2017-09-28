@@ -5,7 +5,7 @@
 
 
 void ATankAIController::BeginPlay() {
-    Super::BeginPlay();
+    Super::BeginPlay(); UE_LOG(LogTemp, Warning, TEXT("Hey"));
 }
 
 void ATankAIController::Tick(float deltaTime) {
