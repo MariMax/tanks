@@ -2,6 +2,7 @@
 
 #include "Projectile.h"
 #include <GameFramework/ProjectileMovementComponent.h>
+#include <Particles/ParticleSystemComponent.h>
 
 
 // Sets default values
@@ -9,6 +10,17 @@ AProjectile::AProjectile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	StaticMesh = CreateAbstractDefaultSubobject<UStaticMeshComponent>(FName("Static Mesh"));
+	SetRootComponent(StaticMesh);
+	StaticMesh->SetNotifyRigidBodyCollision(true);
+	StaticMesh->SetVisibility(false);
+
+
+	LaunchBlast = CreateAbstractDefaultSubobject<UParticleSystemComponent>(FName("Particle system"));
+	LaunchBlast->AttachTo(RootComponent);
+
+	
 
 	projectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(FName("projectile movement"));
 	projectileMovementComponent->bAutoActivate = false;
