@@ -9,18 +9,19 @@
 AProjectile::AProjectile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	StaticMesh = CreateAbstractDefaultSubobject<UStaticMeshComponent>(FName("Static Mesh"));
 	SetRootComponent(StaticMesh);
 	StaticMesh->SetNotifyRigidBodyCollision(true);
 	StaticMesh->SetVisibility(false);
 
+	Blast = CreateAbstractDefaultSubobject<UParticleSystemComponent>(FName("Projectile smoke tail"));
+	Blast->AttachTo(RootComponent);// , FAttachmentTransformRules::KeepRelativeTransform);
 
-	LaunchBlast = CreateAbstractDefaultSubobject<UParticleSystemComponent>(FName("Particle system"));
-	LaunchBlast->AttachTo(RootComponent);
-
-	
+	HitExplosion = CreateAbstractDefaultSubobject<UParticleSystemComponent>(FName("Hit Explosion"));
+	HitExplosion->AttachTo(RootComponent);//, FAttachmentTransformRules::KeepRelativeTransform);
+	HitExplosion->bAutoActivate = false;
 
 	projectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(FName("projectile movement"));
 	projectileMovementComponent->bAutoActivate = false;
@@ -30,14 +31,13 @@ AProjectile::AProjectile()
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	StaticMesh->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
 }
 
-// Called every frame
-void AProjectile::Tick(float DeltaTime)
+void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
 {
-	Super::Tick(DeltaTime);
-
+	Blast->Deactivate();
+	HitExplosion->Activate();
 }
 
 void AProjectile::launchProjectile(float speed)
