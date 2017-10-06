@@ -3,6 +3,7 @@
 #include "Projectile.h"
 #include <GameFramework/ProjectileMovementComponent.h>
 #include <Particles/ParticleSystemComponent.h>
+#include <PhysicsEngine/RadialForceComponent.h>
 
 
 // Sets default values
@@ -17,14 +18,17 @@ AProjectile::AProjectile()
 	StaticMesh->SetVisibility(false);
 
 	Blast = CreateAbstractDefaultSubobject<UParticleSystemComponent>(FName("Projectile smoke tail"));
-	Blast->AttachTo(RootComponent);// , FAttachmentTransformRules::KeepRelativeTransform);
+	Blast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
 	HitExplosion = CreateAbstractDefaultSubobject<UParticleSystemComponent>(FName("Hit Explosion"));
-	HitExplosion->AttachTo(RootComponent);//, FAttachmentTransformRules::KeepRelativeTransform);
+	HitExplosion->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	HitExplosion->bAutoActivate = false;
 
 	projectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(FName("projectile movement"));
 	projectileMovementComponent->bAutoActivate = false;
+
+	ForceImpulse = CreateDefaultSubobject<URadialForceComponent>(FName("Force inpulse"));
+	ForceImpulse->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 // Called when the game starts or when spawned
@@ -38,6 +42,7 @@ void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor,
 {
 	Blast->Deactivate();
 	HitExplosion->Activate();
+	ForceImpulse->FireImpulse();
 }
 
 void AProjectile::launchProjectile(float speed)

@@ -9,6 +9,7 @@
 class UProjectileMovementComponent;
 class UParticleSystemComponent;
 class UStaticMeshComponent;
+class URadialForceComponent;
 
 UCLASS()
 class TANKS_API AProjectile : public AActor
@@ -39,4 +40,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Setup")
 	UStaticMeshComponent* StaticMesh = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Setup")
+	URadialForceComponent* ForceImpulse = nullptr;
 };
