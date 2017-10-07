@@ -4,6 +4,7 @@
 #include <GameFramework/ProjectileMovementComponent.h>
 #include <Particles/ParticleSystemComponent.h>
 #include <PhysicsEngine/RadialForceComponent.h>
+#include <Kismet/GameplayStatics.h>
 
 
 // Sets default values
@@ -43,6 +44,27 @@ void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor,
 	Blast->Deactivate();
 	HitExplosion->Activate();
 	ForceImpulse->FireImpulse();
+
+	SetRootComponent(HitExplosion);
+	StaticMesh->DestroyComponent();
+
+	UGameplayStatics::ApplyRadialDamage
+	(
+		this,
+		Damage,
+		GetActorLocation(),
+		ForceImpulse->Radius,
+		UDamageType::StaticClass(),
+		TArray < AActor * >()
+	);
+
+	FTimerHandle InOutHandle;
+	GetWorld()->GetTimerManager().SetTimer(InOutHandle, this, &AProjectile::SampleTimerExpired, DestroyDelay, false);
+}
+
+void AProjectile::SampleTimerExpired()
+{
+	Destroy();
 }
 
 void AProjectile::launchProjectile(float speed)
