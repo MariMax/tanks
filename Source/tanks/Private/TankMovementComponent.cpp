@@ -22,7 +22,7 @@ void UTankMovementComponent::InitTracks(UTankTrack* lt, UTankTrack* rt) {
 }
 
 void UTankMovementComponent::IntendMoveForward(float Throw) {
-    auto speed = FMath::Clamp<float>(Throw, -1.f, 1.f);
+    auto speed = FMath::Clamp<float>(Throw, -2.f, 2.f);
     if (!LeftTrack || !RightRtack) return;
     LeftTrack->Throttle(speed);
     RightRtack->Throttle(speed);
@@ -30,7 +30,7 @@ void UTankMovementComponent::IntendMoveForward(float Throw) {
 
 
 void UTankMovementComponent::IntendRotate(float Throw) {
-    auto speed = FMath::Clamp<float>(Throw, -1.f, 1.f);
+    auto speed = FMath::Clamp<float>(Throw, -2.f, 2.f);
     if (!LeftTrack || !RightRtack) return;
     LeftTrack->Throttle(speed);
     RightRtack->Throttle(-speed);

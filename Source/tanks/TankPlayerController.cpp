@@ -23,7 +23,7 @@ void ATankPlayerController::SetPawn(APawn * InPawn)
 }
 
 void ATankPlayerController::OnTankDestroyed() {
-	UE_LOG(LogTemp, Warning, TEXT("Sorry you are dead"));
+	StartSpectatingOnly();
 }
 
 void ATankPlayerController::Tick(float deltaTime) {

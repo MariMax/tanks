@@ -48,5 +48,6 @@ APawn* ATankAIController::getPlayerTank() const {
 
 void ATankAIController::OnTankDeath()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Enemy Destroyed"));
+	if (!GetPawn()) { return; }
+	GetPawn()->DetachFromControllerPendingDestroy();
 }
