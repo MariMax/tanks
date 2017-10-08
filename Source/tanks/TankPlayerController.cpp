@@ -2,12 +2,28 @@
 
 #include "TankPlayerController.h"
 #include "TankAimingComponent.h"
+#include "Public/Tank.h"
 
 void ATankPlayerController::BeginPlay() {
     Super::BeginPlay();
     auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
     if (!ensure(AimingComponent)) {return;}
     AimingComponentFound(AimingComponent);
+}
+
+void ATankPlayerController::SetPawn(APawn * InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (!InPawn) return;
+
+	auto tank = Cast<ATank>(InPawn);
+	if (!ensure(tank)) { return; }
+	tank->OnTankDeath.AddUniqueDynamic(this, &ATankPlayerController::OnTankDestroyed);
+
+}
+
+void ATankPlayerController::OnTankDestroyed() {
+	UE_LOG(LogTemp, Warning, TEXT("Sorry you are dead"));
 }
 
 void ATankPlayerController::Tick(float deltaTime) {
@@ -71,7 +87,7 @@ bool ATankPlayerController::getVectorHitLocation(const FVector& direction, FVect
         hitResult,
         tankLocation,
         end,
-        ECC_Visibility,
+        ECC_Camera,
         collisionQueryParams,
         collisionResponseParams
     )) {

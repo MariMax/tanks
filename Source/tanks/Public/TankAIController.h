@@ -17,9 +17,13 @@ class TANKS_API ATankAIController : public AAIController
 private:
     void BeginPlay() override;
     virtual void Tick(float DeltaTime) override;
+	virtual void SetPawn(APawn* InPawn) override;
     
     APawn* getPlayerTank() const;
     
     UPROPERTY(EditDefaultsOnly, Category="Setup")
     float HowFarAwayICanStopMpvingTowardsTheGoal = 8000;
+
+	UFUNCTION()
+	void OnTankDeath();
 };

@@ -16,7 +16,10 @@ class TANKS_API ATankPlayerController : public APlayerController
 	GENERATED_BODY()
 public:
     virtual void BeginPlay() override;
-    virtual void Tick(float) override;
+	void SetPawn(APawn * InPawn) override;
+	UFUNCTION()
+	void OnTankDestroyed();
+	virtual void Tick(float) override;
     
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="CrossHair Position")
     float crossHairXPosition = .5f;

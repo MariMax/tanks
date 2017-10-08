@@ -2,10 +2,11 @@
 
 #include "TankAIController.h"
 #include "TankAimingComponent.h"
+#include "Tank.h"
 
 
 void ATankAIController::BeginPlay() {
-    Super::BeginPlay(); UE_LOG(LogTemp, Warning, TEXT("Hey"));
+    Super::BeginPlay();
 }
 
 void ATankAIController::Tick(float deltaTime) {
@@ -29,7 +30,23 @@ void ATankAIController::Tick(float deltaTime) {
 	}
 }
 
+void ATankAIController::SetPawn(APawn * InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (!InPawn) return;
+
+	auto tank = Cast<ATank>(InPawn);
+	if (!ensure(tank)) { return; }
+	tank->OnTankDeath.AddUniqueDynamic(this, &ATankAIController::OnTankDeath);
+
+}
+
 APawn* ATankAIController::getPlayerTank() const {
     auto pc = GetWorld()->GetFirstPlayerController();
     return pc->GetPawn();
+}
+
+void ATankAIController::OnTankDeath()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Enemy Destroyed"));
 }
